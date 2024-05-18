@@ -108,8 +108,8 @@ def main():
         elif choice == "4":
             date_input = input("Enter date to view expenses (YYYY-MM-DD): ")
             budget_date = datetime.datetime.strptime(date_input, '%Y-%m-%d').date()
-            print("---------View Expenses by Date----------")
-            tracker.view_expenses_by_date(expense_date)
+            print("---------View Budget by Date----------")
+            tracker.view_budget_by_date(budget_date)
             print("----------------------------------------")
 
         elif choice == "5":
