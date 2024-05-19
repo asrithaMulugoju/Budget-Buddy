@@ -1,4 +1,4 @@
-import calendar
+'''import calendar
 import datetime
 
 class Budget:
@@ -78,7 +78,7 @@ def main():
                 "🎉 Fun",
                 "✨ Misc",
             ]
-            while True:
+        while True:
                 print("Select a category: ")
                 for i, category_name in enumerate(budget_categories):
                     print(f"  {i + 1}. {category_name}")
@@ -89,13 +89,12 @@ def main():
                 if selected_index in range(len(budget_categories)):
                     selected_category = budget_categories[selected_index]
                     new_budget = Budget(
-                        name=budget_name, category=selected_category, amount=budget_amount
-                    )
+                            name=budget_name, category=selected_category, amount=budget_amount
+                        )
                     tracker.add_budget(selected_category, expense_amount, datetime.date.today())
                     break
                 else:
                     print("Invalid category. Please try again!")
-
         elif choice == "2":
             tracker.view_spending_patterns()
 
@@ -114,6 +113,117 @@ def main():
 
         elif choice == "5":
             print("Exiting...thank you, see you soon :)")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
+'''
+import datetime
+
+class Budget:
+    def __init__(self, name, category, amount):
+        self.name = name
+        self.category = category
+        self.amount = amount
+
+class BudgetTracker:
+    def __init__(self):
+        self.budgets = {}
+
+    def add_budget(self, category, amount, date):
+        if category in self.budgets:
+            self.budgets[category].append((amount, date))
+        else:
+            self.budgets[category] = [(amount, date)]
+
+    def get_total_spending(self):
+        total = 0
+        for category in self.budgets:
+            for amount, _ in self.budgets[category]:
+                total += amount
+        return total
+
+    def get_category_spending(self, category):
+        if category in self.budgets:
+            return sum(amount for amount, _ in self.budgets[category])
+        else:
+            return 0
+
+    def view_spending_patterns(self):
+        print("Spending Patterns:")
+        for category in self.budgets:
+            total_spending = sum(amount for amount, _ in self.budgets[category])
+            print(f"{category}: {total_spending}/-")
+        print()
+
+    def view_budget_by_date(self, date):
+        print(f"Budget on {date}:")
+        budget_found = False
+        for category in self.budgets:
+            budget_on_date = [amount for amount, budget_date in self.budgets[category] if budget_date == date]
+            if budget_on_date:
+                total_spending = sum(budget_on_date)
+                print(f"{category}: {total_spending}/-")
+                budget_found = True
+        if not budget_found:
+            print("None")
+        print()
+
+def main():
+    tracker = BudgetTracker()
+    print("🎯 Running Budget Tracker!")
+    budget_categories = [
+        "🍔 Food",
+        "🏠 Home",
+        "💼 Work",
+        "🎉 Fun",
+        "✨ Misc"
+    ]
+
+    while True:
+        print("1. Add Budget")
+        print("2. View Spending Patterns")
+        print("3. View Total Spending")
+        print("4. View Budgets by Date")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            budget_name = input("Enter budget name: ")
+            budget_amount = float(input("Enter budget amount: "))
+            
+            while True:
+                print("Select a category: ")
+                for i, category_name in enumerate(budget_categories):
+                    print(f"  {i + 1}. {category_name}")
+
+                selected_index = int(input(f"Enter a category number [1 - {len(budget_categories)}]: ")) - 1
+
+                if selected_index in range(len(budget_categories)):
+                    selected_category = budget_categories[selected_index]
+                    tracker.add_budget(selected_category, budget_amount, datetime.date.today())
+                    break
+                else:
+                    print("Invalid category. Please try again!")
+        
+        elif choice == "2":
+            tracker.view_spending_patterns()
+
+        elif choice == "3":
+            total_spending = tracker.get_total_spending()
+            print(f"Total Spending: {total_spending}/-")
+
+        elif choice == "4":
+            date_input = input("Enter date to view expenses (YYYY-MM-DD): ")
+            budget_date = datetime.datetime.strptime(date_input, '%Y-%m-%d').date()
+            tracker.view_budget_by_date(budget_date)
+
+        elif choice == "5":
+            print("Exiting... thank you, see you soon :)")
             break
 
         else:
